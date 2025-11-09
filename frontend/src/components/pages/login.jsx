@@ -1,13 +1,47 @@
 import { useState, useRef, useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { ForgotPassDialog } from "./forgotPassworDialog";
+import { BlogContext } from "../../store/blogContext";
 import axios from "axios";
 
 const Login = () => {
   const [forgotPassDialog, showforgotPassDialog] = useState(false);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  const { setIsloggedin } = useContext(BlogContext);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+    console.log({ email, password });
+    axios({
+      method: "POST",
+      url: "http://localhost:1111/login",
+      data: {
+        email,
+        password,
+      },
+    })
+      .then((res) => {
+        console.log("Login succesfull", res.data.message);
+        localStorage.setItem("userDetail", res.data.token);
+        setSuccess("Login successful. Redirecting to home page...");
+        navigate("/");
+        setIsloggedin(true);
+      })
+      .catch((err) => {
+        console.log("Login error ", err);
+        setError("Invalid Email / Password");
+      });
+    emailRef.current.value = "";
+    passwordRef.current.value = "";
+  };
 
   return (
     <>
@@ -93,9 +127,7 @@ const Login = () => {
               <p className="text-red-500 text-sm mt-2 font-semibold">{error}</p>
             )}
             {success && (
-              <p className="text-green-500 text-sm mt-2 font-semibold">
-                {success}
-              </p>
+              <p className="text-green-500 text-sm mt-2 font-semibold">{success}</p>
             )}
 
             <button
