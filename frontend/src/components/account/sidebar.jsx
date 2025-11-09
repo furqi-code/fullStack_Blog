@@ -45,7 +45,7 @@ const Sidebar = () => {
         <div className="flex items-center space-x-4 mb-6">
           <img
             src="https://res.cloudinary.com/dgcqtwfbj/image/upload/w_450/v1756797851/portrait-787522_1280_p6fluq.jpg"
-            alt=""
+            alt="profile pic"
             className="w-12 h-12 rounded-full"
           />
           <div>
