@@ -32,8 +32,10 @@ const Login = () => {
         console.log("Login succesfull", res.data.message);
         localStorage.setItem("userDetail", res.data.token);
         setSuccess("Login successful. Redirecting to home page...");
-        navigate("/");
-        setIsloggedin(true);
+        setTimeout(() => {
+          setIsloggedin(true);
+          navigate("/");
+        }, 2000);
       })
       .catch((err) => {
         console.log("Login error ", err);

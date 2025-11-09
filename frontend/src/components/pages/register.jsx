@@ -31,7 +31,9 @@ const Register = () => {
       .then((res) => {
         console.log("user Register succesfull", res.data.message);
         setSuccess("Register successfull. Redirecting to login...");
-        navigate("/login");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       })
       .catch((err) => {
         console.log("user register error ", err);

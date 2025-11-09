@@ -2,9 +2,43 @@ import { useRef, useState } from "react";
 import axios from "axios";
 
 export function ForgotPassDialog({ showforgotPassDialog }) {
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const emailRef = useRef();
   const newPasswordRef = useRef();
   const confirmPasswordRef = useRef();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    const email = emailRef.current.value;
+    const newPassword = newPasswordRef.current.value;
+    const confirmPassword = confirmPasswordRef.current.value;
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    axios({
+      method: "PATCH",
+      url: "http://localhost:1111/forgotPassword",
+      data: {
+        email,
+        newPassword,
+        confirmPassword,
+      },
+    })
+      .then((res) => {
+        setSuccess("Password reset successful. Redirecting to login...");
+        setTimeout(() => {
+          showforgotPassDialog(false);
+        }, 2000);
+      })
+      .catch((err) => {
+        setError(err.response?.data?.message || "Something went wrong");
+      });
+  };
 
   return (
     <>
