@@ -61,6 +61,29 @@ router.post("/addBlog", async (req, res) => {
   }
 });
 
+router.patch("/editBlog", async (req, res) => {
+  try {
+    const user_id = req.user_id;
+    const blog_id = req.query.blog_id;
+    const {updatedTitle, updatedDescription} = req.body;
+    await executeQuery(`UPDATE blogs SET title = ?, description = ? WHERE user_id = ? AND blog_id = ?`,
+        [updatedTitle, updatedDescription, user_id, blog_id]);
+    const [blog] = await executeQuery(`SELECT * FROM blogs WHERE user_id = ? AND blog_id = ?`, [user_id, blog_id]);
+    res.status(200).send(
+        {
+            message: "Blog updated from db",
+            updatedBlog: blog
+        }
+    );
+  } catch (err) {
+    console.error("Error deleting your blogs:", err);
+    res.status(500).send({
+      message: "Something went wrong",
+      error: err.message,
+    });
+  }
+});
+
 router.delete("/deleteBlog", async (req, res) => {
   try {
     const user_id = req.user_id;
