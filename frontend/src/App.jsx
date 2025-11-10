@@ -31,11 +31,11 @@ const routes = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: "/:categoryBlogs",
+        path: "/:categoryType",
         element: <Blog />,
       },
       {
-        path: "/:categoryBlogs/:blogId",
+        path: "/:categoryType/:blogId",
         element: <Detail />,
       },
       {

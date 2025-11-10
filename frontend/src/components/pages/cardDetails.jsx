@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router";
+import { BlogContext } from "../../store/blogContext";
+import axios from "axios";
 import {
   HeartIcon,
   ShareIcon,
   ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
-import axios from "axios";
 
 const Detail = () => {
+  const { addtoFavourite, getFavouritelist, favouriteList, isLoggedin } = useContext(BlogContext);
   const [blog, setBlog] = useState(null);
   const [comments, setComments] = useState([]);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const { categoryBlogs, blogId } = useParams();
+  const { categoryType, blogId } = useParams();
   const navigate = useNavigate();
-  console.log("category: ", categoryBlogs);
+  console.log("category: ", categoryType);
   console.log("blog_id: ", blogId);
 
   let content = ""; // generate fifty random string
@@ -26,13 +27,19 @@ const Detail = () => {
                  <h2 class="text-xl font-semibold mb-3 mt-6">The Role of Blog Research</h2>
                 <p class="mb-4">${content}</p>`;
 
+  const alreadyinList = favouriteList.find((blog) => blog.blog_id == blogId);
+
+  useEffect(() => {
+    if (isLoggedin) getFavouritelist();
+  }, []);
+
   useEffect(() => {
     axios({
       method: "GET",
-      url: `http://localhost:1111/blogs/oneBlog?category=${categoryBlogs}&&blog_id=${blogId}`,
+      url: `http://localhost:1111/blogs/oneBlog?category=${categoryType}&&blog_id=${blogId}`,
     })
       .then((res) => {
-        console.log(`one ${categoryBlogs} Blog \n`, res.data.data);
+        console.log(`one ${categoryType} Blog \n`, res.data.data);
         setBlog(res.data.data);
       })
       .catch((err) => {
@@ -62,10 +69,6 @@ const Detail = () => {
     ];
     setComments(commentsData);
   }, []);
-
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
 
   if (!blog) return null;
 
@@ -105,13 +108,18 @@ const Detail = () => {
               </div>
               <div className="flex items-center space-x-4">
                 <button
-                  onClick={toggleFavorite}
+                  onClick={async () => {
+                    if(!alreadyinList)
+                      await addtoFavourite(blogId);
+                    else
+                      alert("this Blog already available in your favoutire list")
+                  }}
                   className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
-                  {isFavorite ? (
-                    <HeartIconSolid className="w-6 h-6 text-red-500" />
-                  ) : (
+                  {!alreadyinList ? (
                     <HeartIcon className="w-6 h-6 text-gray-600" />
+                  ) : (
+                    <HeartIconSolid className="w-6 h-6 text-red-500" />
                   )}
                 </button>
                 <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">

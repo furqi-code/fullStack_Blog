@@ -5,8 +5,8 @@ import axios from "axios";
 
 const Blog = () => {
   const [latestBlogs, setLatestBlogs] = useState([]);
-  const { categoryBlogs } = useParams();
-  console.log("categoryBlogs: ", categoryBlogs);
+  const { categoryType } = useParams();
+  console.log("categoryType: ", categoryType);
 
   const categories = [
     { name: "Fashion", count: 4 },
@@ -18,16 +18,16 @@ const Blog = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `http://localhost:1111/blogs?category=${categoryBlogs}`,
+      url: `http://localhost:1111/blogs?category=${categoryType}`,
     })
       .then((res) => {
-        console.log(`${categoryBlogs} Blogs \n`, res.data.data);
+        console.log(`${categoryType} Blogs \n`, res.data.data);
         setLatestBlogs(res.data.data);
       })
       .catch((err) => {
         console.log("Error while fetching blogs");
       }); 
-  }, [categoryBlogs]);
+  }, [categoryType]);
 
   return (
     <>
@@ -65,7 +65,7 @@ const Blog = () => {
             <main className="lg:col-span-9">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {latestBlogs.map((blog) => (
-                   <Link to={`/${categoryBlogs}/${blog.blog_id}`}>
+                   <Link to={`/${categoryType}/${blog.blog_id}`}>
                     <BlogArticles blog={blog}></BlogArticles>
                   </Link>
                 ))}

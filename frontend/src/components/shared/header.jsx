@@ -76,7 +76,7 @@ const Header = () => {
                   }}
                 >
                   Logout
-                </Link>{" "}
+                </Link>
               </>
             )}
           </div>
