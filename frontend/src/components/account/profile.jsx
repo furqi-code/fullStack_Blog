@@ -8,9 +8,11 @@ const Profile = () => {
   const emailRef = useRef(null);
   const bioRef = useRef(null);
   const locationRef = useRef(null);
-  const profile_picRef = useRef(null);
+  const profile_picRef = useRef(null);  // input field
+  const [profilPic, setProfilePic] = useState("");  // <img>
   const [date, setDate] = useState(null);
-  const [profilPic, setProfilePic] = useState("");
+  const [totalPost, setTotalPost] = useState(0);
+  const [totalComments, setTotalComments] = useState(0);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -37,6 +39,38 @@ const Profile = () => {
         setError("Failed to load profile data.");
       });
   }, [success]);
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "http://localhost:1111/account/myBlogs",
+      headers: {
+        Authorization: localStorage.getItem("userDetail"),
+      },
+    })
+    .then((res) => {
+      if (res.data.data.length > 0) setTotalPost(res.data.data.length);
+    })
+    .catch((err) => {
+        console.log("Couldn't fetch user blogs", err);
+      });
+  })
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: `http://localhost:1111/account/comment/personal`,
+      headers: {
+        Authorization: localStorage.getItem("userDetail"),
+      },
+    })
+      .then((res) => {
+        if (res.data.data.length > 0) setTotalComments(res.data.data.length);
+      })
+      .catch((err) => {
+        console.log("Error while fetching your personal comments");
+      });
+  })
 
   const handleSaveChanges = (e) => {
     e.preventDefault();
@@ -224,12 +258,12 @@ const Profile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-sm text-gray-500">Total Posts</p>
-                      <p className="text-2xl font-semibold text-gray-900">7</p>
+                      <p className="text-2xl font-semibold text-gray-900">{totalPost}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-sm text-gray-500">Total Comments</p>
                       <p className="text-2xl font-semibold text-gray-900">
-                        121
+                        {totalComments}
                       </p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">

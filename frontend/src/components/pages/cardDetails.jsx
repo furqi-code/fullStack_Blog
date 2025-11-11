@@ -73,7 +73,7 @@ const Detail = () => {
       if(!content) return alert("Please fill up the comment box");
       axios({
         method: "POST",
-        url: `http://localhost:1111/account/comment?blog_id=${blogId}`,
+        url: `http://localhost:1111/account/comment/add?blog_id=${blogId}`,
         headers: {
           Authorization: localStorage.getItem("userDetail"),
         },
