@@ -8,6 +8,9 @@ const Profile = () => {
   const emailRef = useRef(null);
   const bioRef = useRef(null);
   const locationRef = useRef(null);
+  const profile_picRef = useRef(null);
+  const [date, setDate] = useState(null);
+  const [profilPic, setProfilePic] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -20,17 +23,20 @@ const Profile = () => {
       },
     })
       .then((res) => {
-        const { Email, username, Bio, location } = res.data.info;
+        const { Email, username, Bio, location, profile_pic, created_at } = res.data.info;
         if (emailRef.current) emailRef.current.value = Email;
         if (usernameRef.current) usernameRef.current.value = username;
         if (bioRef.current) bioRef.current.value = Bio || "";
         if (locationRef.current) locationRef.current.value = location || "";
+        if (profile_picRef.current) profile_picRef.current.value = profile_pic || "";
+        setDate(created_at);
+        setProfilePic(profile_pic);
       })
       .catch((err) => {
         console.log("Couldn't fetch user profile", err);
         setError("Failed to load profile data.");
       });
-  }, []);
+  }, [success]);
 
   const handleSaveChanges = (e) => {
     e.preventDefault();
@@ -40,6 +46,7 @@ const Profile = () => {
     const email = emailRef.current.value;
     const bio = bioRef.current.value;
     const location = locationRef.current.value;
+    const profile_pic = profile_picRef.current.value;
     axios({
       method: "PATCH",
       url: "http://localhost:1111/account/profile",
@@ -51,6 +58,7 @@ const Profile = () => {
         username,
         location,
         bio,
+        profile_pic
       },
     })
       .then((res) => {
@@ -72,7 +80,7 @@ const Profile = () => {
         <div className="container mx-auto px-4 max-w-[1440px]">
           <div className="flex flex-col md:flex-row gap-8">
             {/* Sidebar */}
-            <Sidebar/>
+            <Sidebar />
 
             {/* Main Content */}
             <main className="flex-1">
@@ -85,7 +93,7 @@ const Profile = () => {
                     <div className="md:w-1/3">
                       <div className="aspect-square w-full max-w-[200px] mx-auto relative">
                         <img
-                          src="https://st2.depositphotos.com/1537427/5859/v/950/depositphotos_58597527-stock-illustration-female-user-icon.jpg"
+                          src={profilPic}
                           alt="Profile pic"
                           className="rounded-full w-full h-full object-cover"
                         />
@@ -168,6 +176,22 @@ const Profile = () => {
                             placeholder="City, Country"
                           />
                         </div>
+                        <div>
+                          <label
+                            htmlFor="profile_pic"
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                          >
+                            Profile pic
+                          </label>
+                          <input
+                            type="url"
+                            name="profile_pic"
+                            ref={profile_picRef}
+                            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
+                              focus:outline-none focus:border-primary-color focus:ring-1 focus:ring-primary-color"
+                            placeholder="image link OR select from your file"
+                          />
+                        </div>
 
                         {error && (
                           <p className="text-red-500 text-sm mt-2 font-semibold">
@@ -200,18 +224,18 @@ const Profile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-sm text-gray-500">Total Posts</p>
-                      <p className="text-2xl font-semibold text-gray-900">24</p>
+                      <p className="text-2xl font-semibold text-gray-900">7</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-sm text-gray-500">Total Comments</p>
                       <p className="text-2xl font-semibold text-gray-900">
-                        142
+                        121
                       </p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-sm text-gray-500">Joined</p>
                       <p className="text-2xl font-semibold text-gray-900">
-                        5 Aug, 2025
+                        {date ? date.split("T")[0] : ""}
                       </p>
                     </div>
                   </div>

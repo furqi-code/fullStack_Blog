@@ -1,6 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useParams, useNavigate } from "react-router";
 import { BlogContext } from "../../store/blogContext";
+import CommentCard from "../shared/commentCard";
 import axios from "axios";
 import {
   HeartIcon,
@@ -10,11 +11,13 @@ import {
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 
 const Detail = () => {
-  const { addtoFavourite, getFavouritelist, favouriteList, isLoggedin } = useContext(BlogContext);
+  const { addtoFavourite, getFavouritelist, favouriteList, isLoggedin } =
+    useContext(BlogContext);
   const [blog, setBlog] = useState(null);
   const [comments, setComments] = useState([]);
-  const { categoryType, blogId } = useParams();
+  const commentRef = useRef();
   const navigate = useNavigate();
+  const { categoryType, blogId } = useParams();
   console.log("category: ", categoryType);
   console.log("blog_id: ", blogId);
 
@@ -30,7 +33,9 @@ const Detail = () => {
   const alreadyinList = favouriteList.find((blog) => blog.blog_id == blogId);
 
   useEffect(() => {
-    if (isLoggedin) getFavouritelist();
+    if (isLoggedin) {
+      getFavouritelist();
+    }
   }, []);
 
   useEffect(() => {
@@ -47,28 +52,68 @@ const Detail = () => {
       });
 
     // Simulated comments
-    const commentsData = [
-      {
-        id: 1,
-        author: "Sarah Miller",
-        authorImage:
-          "https://res.cloudinary.com/dgcqtwfbj/image/upload/v1756797851/portrait-787522_1280_p6fluq.jpg",
-        content:
-          "This is a great article! The insights about user research are particularly valuable.",
-        date: "2 hours ago",
+    // const commentsData = [
+    //   {
+    //     id: 1,
+    //     author: "Sarah Miller",
+    //     authorImage:
+    //       "https://res.cloudinary.com/dgcqtwfbj/image/upload/v1756797851/portrait-787522_1280_p6fluq.jpg",
+    //     content:
+    //       "This is a great article! The insights about user research are particularly valuable.",
+    //     date: "2 hours ago",
+    //   },
+    //   {
+    //     id: 2,
+    //     author: "James Wilson",
+    //     authorImage:
+    //       "https://res.cloudinary.com/dgcqtwfbj/image/upload/v1756797987/butterfly-9791233_1280_ys6yeg.jpg",
+    //     content:
+    //       "I appreciate how you broke down the design process. Very insightful!",
+    //     date: "5 hours ago",
+    //   },
+    // ];
+
+    axios({
+      method: "GET",
+      url: `http://localhost:1111/account/comment?blog_id=${blogId}`,
+      headers: {
+        Authorization: localStorage.getItem("userDetail"),
       },
-      {
-        id: 2,
-        author: "James Wilson",
-        authorImage:
-          "https://res.cloudinary.com/dgcqtwfbj/image/upload/v1756797987/butterfly-9791233_1280_ys6yeg.jpg",
-        content:
-          "I appreciate how you broke down the design process. Very insightful!",
-        date: "5 hours ago",
-      },
-    ];
-    setComments(commentsData);
+    })
+      .then((res) => {
+        if (res.data.data.length > 0) setComments(res.data.data);
+      })
+      .catch((err) => {
+        console.log("Error while fetching comment");
+      });
   }, []);
+
+  const addComment = (e) => {
+    e.preventDefault();
+    if (isLoggedin) {
+      const content = commentRef.current.value;
+      if(!content) return alert("Please fill up the comment box");
+      axios({
+        method: "POST",
+        url: `http://localhost:1111/account/comment?blog_id=${blogId}`,
+        headers: {
+          Authorization: localStorage.getItem("userDetail"),
+        },
+        data: {
+          content,
+        },
+      })
+        .then((res) => {
+          setComments(res.data.data);
+        })
+        .catch((err) => {
+          console.log("Error while adding a comment");
+        });
+      commentRef.current.value = "";
+    } else {
+      alert("Kindly login to add a comment under this blog");
+    }
+  };
 
   if (!blog) return null;
 
@@ -109,10 +154,11 @@ const Detail = () => {
               <div className="flex items-center space-x-4">
                 <button
                   onClick={async () => {
-                    if(!alreadyinList)
-                      await addtoFavourite(blogId);
+                    if (!alreadyinList) await addtoFavourite(blogId);
                     else
-                      alert("this Blog already available in your favoutire list")
+                      alert(
+                        "this Blog already available in your favoutire list"
+                      );
                   }}
                   className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
@@ -151,16 +197,16 @@ const Detail = () => {
             </h2>
 
             {/* Comment Form */}
-            <form className="mb-12">
+            <form className="mb-12" onSubmit={addComment}>
               <textarea
-                value=""
+                ref={commentRef}
                 placeholder="Add a comment..."
                 className="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-color focus:border-primary-color resize-none h-32"
               />
               <div className="mt-4 flex justify-end">
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-primary-color text-white rounded-md hover:bg-secondary-color transition-colors"
+                  className="px-6 py-2 bg-primary-color rounded-md hover:bg-secondary-color transition-colors"
                 >
                   Post Comment
                 </button>
@@ -168,26 +214,12 @@ const Detail = () => {
             </form>
 
             {/* Comments List */}
+            {/* made a card for every comment on this blog */}
             <div className="space-y-8">
               {comments.map((comment) => (
-                <div key={comment.id} className="flex space-x-4">
-                  <img
-                    src={comment.authorImage}
-                    alt={comment.author}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                  <div>
-                    <div className="flex items-center space-x-2 mb-1">
-                      <h4 className="font-medium text-gray-900">
-                        {comment.author}
-                      </h4>
-                      <span className="text-sm text-gray-500">
-                        {comment.date}
-                      </span>
-                    </div>
-                    <p className="text-gray-600">{comment.content}</p>
-                  </div>
-                </div>
+                <CommentCard
+                  comment={comment}
+                ></CommentCard>
               ))}
             </div>
           </section>

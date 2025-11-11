@@ -10,8 +10,9 @@ import { BlogContext } from "../../store/blogContext";
 import axios from "axios";
 
 const Sidebar = () => {
-  const { setIsloggedin } = useContext(BlogContext);
+  const { setIsloggedin, setFavouritelist } = useContext(BlogContext);
   const [username, setUsername] = useState("");
+  const [profilePic, setProfilePic] = useState("");
   const navigate = useNavigate()
 
   const tabs = [
@@ -50,21 +51,22 @@ const Sidebar = () => {
       },
     })
       .then((res) => {
-        const { username } = res.data.info;
+        const { username, profile_pic } = res.data.info;
         setUsername(username);
+        setProfilePic(profile_pic);
       })
       .catch((err) => {
         console.log("Couldn't fetch user profile", err);
         setError("Failed to load profile data.");
       });
-  }, []);
+  }, [username, profilePic]);
 
   return (
     <aside className="md:w-64 flex-shrink-0">
       <div className="bg-white shadow rounded-lg p-6">
         <div className="flex items-center space-x-4 mb-6">
           <img
-            src="https://st2.depositphotos.com/1537427/5859/v/950/depositphotos_58597527-stock-illustration-female-user-icon.jpg"
+            src={profilePic}
             alt="profile pic"
             className="w-12 h-12 rounded-full"
           />
@@ -90,6 +92,7 @@ const Sidebar = () => {
             onClick={() => {
               localStorage.removeItem("userDetail");
               setIsloggedin(false);
+              setFavouritelist([]);  // empty krde
               navigate("/");
             }}
             className="w-full flex items-center space-x-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"

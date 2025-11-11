@@ -16,6 +16,7 @@ const MyblogCard = ({ setMyBlogs, blog }) => {
     })
       .then((res) => {
         // window.location.reload();
+        // could have run the select query in Api to get the fresh myBlogs 
         setMyBlogs((prevBlogs) =>
           prevBlogs.filter((b) => b.blog_id !== blog.blog_id)
         );
@@ -42,6 +43,7 @@ const MyblogCard = ({ setMyBlogs, blog }) => {
         setIsEditing(false);
         // update local state array to re-render and 
         // replaced the old blog in the list with the updated one from server
+        // i could have also run the select query in Api to get the fresh myBlogs 
         setMyBlogs((prevBlogs) =>
           prevBlogs.map((b) => b.blog_id !== blog.blog_id ? b : res.data.updatedBlog)
         );

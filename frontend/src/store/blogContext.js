@@ -5,6 +5,7 @@ export const BlogContext = createContext({
   favouriteList: [],
   isLoggedin: undefined,
   setIsloggedin: () => {},
+  setFavouritelist: () => {},
   addtoFavourite: () => {},
   removeFavourite: () => {},
   getFavouritelist: () => {},
@@ -46,6 +47,16 @@ export const BlogContextProvider = ({ children }) => {
     });
   };
 
+  // when clicked on logout
+  const setFavouritelist = (emptyArr) => {
+    dispatch({
+      type: "getFavouritelist",
+      payload: {
+        favouriteList: [...emptyArr],
+      },
+    });
+  };
+
   const getFavouritelist = () => {
     axios({
       method: "GET",
@@ -69,7 +80,7 @@ export const BlogContextProvider = ({ children }) => {
 
   const collectBlogs = async (blog_id) => {
     try {
-      if(state.isLoggedin){
+      if (state.isLoggedin) {
         await axios({
           method: "POST",
           url: `http://localhost:1111/account/favourites?blog_id=${blog_id}`,
@@ -78,8 +89,8 @@ export const BlogContextProvider = ({ children }) => {
           },
         });
         getFavouritelist();
-      }else{
-        alert("Kindly login to add to your Favourite list")
+      } else {
+        alert("Kindly login to add in your Favourite list");
       }
     } catch (err) {
       console.error("Error adding blog to favourites", err);
@@ -88,17 +99,16 @@ export const BlogContextProvider = ({ children }) => {
 
   const removeFavourite = async (blog_id) => {
     try {
-      if(state.isLoggedin){
-
+      if (state.isLoggedin) {
         await axios({
           method: "DELETE",
-          url: `http://localhost:1111/account/favourites?blog_id=${blog_id}`,
+          url: `http://localhost:1111/account/favourites/eliminate?blog_id=${blog_id}`,
           headers: {
             Authorization: localStorage.getItem("userDetail"),
           },
         });
         getFavouritelist();
-      }else{
+      } else {
         alert("Kindly login to remove from your Favourite list");
       }
     } catch (err) {
@@ -106,15 +116,15 @@ export const BlogContextProvider = ({ children }) => {
     }
   };
 
-
   return (
     <BlogContext
       value={{
         favouriteList: state.favouriteList,
         isLoggedin: state.isLoggedin,
         setIsloggedin,
+        setFavouritelist,
         addtoFavourite: collectBlogs,
-        removeFavourite,  
+        removeFavourite,
         getFavouritelist,
       }}
     >

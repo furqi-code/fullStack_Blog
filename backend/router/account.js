@@ -24,7 +24,7 @@ router.get("/profile", async (req, res) => {
 router.patch("/profile", async (req, res) => {
   try {
     const user_id = req.user_id;
-    const { email, username, location, bio } = req.body;
+    const { email, username, location, bio, profile_pic } = req.body;
     if (!email) {
       res.status(409).send({ message: "Email is compulsory" }); // to find the user in db
     }
@@ -35,8 +35,8 @@ router.patch("/profile", async (req, res) => {
       res.status(401).send({ message: "Incorrect Email" });
     }
     await executeQuery(
-      `update users set username = ?, location = ?, bio = ? where user_id = ?`,
-      [username, location, bio, user_id]
+      `update users set username = ?, location = ?, bio = ?, profile_pic = ? where user_id = ?`,
+      [username, location, bio, profile_pic, user_id]
     );
     res.status(200).send({
       message: "User profile updated",
@@ -99,7 +99,7 @@ router.post("/favourites", async (req, res) => {
   }
 });
 
-router.delete("/favourites", async (req, res) => {
+router.delete("/favourites/eliminate", async (req, res) => {
   try {
     const user_id = req.user_id;
     const blog_id = req.query.blog_id;
@@ -114,6 +114,54 @@ router.delete("/favourites", async (req, res) => {
     });
   }
 });
+
+router.get('/comment', async (req, res) => {
+  try{
+    const blog_id = req.query.blog_id;
+    const comments = await executeQuery(`select u.username, u.profile_pic, c.comment_id, c.content, c.commented_at
+      from comments c inner join users u 
+      on c.user_id = u.user_id
+      where c.blog_id = ?`, [blog_id]);
+    if(comments.length > 0){
+      res.status(200).send({data: comments});
+    }else{
+      res.status(401).send({message: "no comment available for this blog"});
+    }
+  }catch(err){
+    res.status(500).send({
+      message: "Something went wrong"
+    })
+  }
+})
+
+router.post('/comment', async (req, res) => {
+  try{
+    const user_id = req.user_id;
+    const blog_id = req.query.blog_id;
+    const { content } = req.body;
+    const commented_at = new Date().toISOString().split('T')[0];
+    const post_comment = await executeQuery(`insert into comments(user_id, blog_id, content, commented_at) 
+      values(?,?,?,?)`, [user_id, blog_id, content, commented_at])
+    const comments = await executeQuery(`select u.username, u.profile_pic, c.comment_id, c.content, c.commented_at
+      from comments c inner join users u 
+      on c.user_id = u.user_id
+      where c.blog_id = ?`, [blog_id]);
+    if(comments.length > 0){
+      res.status(200).send({data: comments});
+    }else{
+      res.status(401).send({message: "no comment available for this blog"});
+    }
+    // if(post_comment.insertId > 0){
+    //   res.status(200).send(`Comment posted under blog_id ${blog_id}`);
+    // }else{
+    //   res.status().send(`Comment can't be posted under blog_id ${blog_id}`);
+    // }
+  }catch(err){
+    res.status(500).send({
+      message: "Something went wrong"
+    })
+  }
+})
 
 router.patch("/change-password", async (req, res) => {
   try {

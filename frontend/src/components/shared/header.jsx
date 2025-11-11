@@ -1,11 +1,12 @@
 import { useState, useContext } from "react";
 import { Link, NavLink } from "react-router";
 import { BlogContext } from "../../store/blogContext";
+import { set } from "react-hook-form";
 // import { token } from "./Config";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const {isLoggedin, setIsloggedin} = useContext(BlogContext);
+  const {isLoggedin, setIsloggedin, setFavouritelist} = useContext(BlogContext);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -72,6 +73,7 @@ const Header = () => {
                   className="px-4 py-2 bg-primary-color hover:bg-secondary-color rounded-md transition"
                   onClick={() => {
                     localStorage.removeItem('userDetail');
+                    setFavouritelist([]); // empty krde
                     setIsloggedin(false);
                   }}
                 >

@@ -75,7 +75,7 @@ const MyBlogs = () => {
                         />
                       ))
                     ) : (
-                      <h4>Zero blogs added</h4>
+                      <p>Zero blogs added</p>
                     )}
                   </div>
                 </div>
