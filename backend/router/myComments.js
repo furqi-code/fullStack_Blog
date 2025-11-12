@@ -10,7 +10,7 @@ router.get('/personal', async (req, res) => {
     if(individual_comments.length > 0){
       res.status(200).send({data: individual_comments});
     }else{
-      res.status(401).send({message: "no comment available for this blog"});
+      res.status(404).send({message: "no comment available for this blog"});
     }
   }catch(err){
     res.status(500).send({
@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
     if(comments.length > 0){
       res.status(200).send({data: comments});
     }else{
-      res.status(401).send({message: "no comment available for this blog"});
+      res.status(404).send({message: "no comment available for this blog"});
     }
   }catch(err){
     res.status(500).send({
@@ -59,7 +59,7 @@ router.post('/add', async (req, res) => {
     if(comments.length > 0){
       res.status(200).send({data: comments});
     }else{
-      res.status(401).send({message: "no comment available for this blog"});
+      res.status(404).send({message: "no comment available for this blog"});
     }
   }catch(err){
     res.status(500).send({

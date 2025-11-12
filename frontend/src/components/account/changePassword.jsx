@@ -8,6 +8,9 @@ const ChangePassword = () => {
   const confirmPasswordRef = useRef(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  // used in sidebar
+  const [profilePic, setProfilePic] = useState(""); 
+  const [username, setUsername] = useState("");   
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,7 +52,12 @@ const ChangePassword = () => {
         <div className="container mx-auto px-4 max-w-[1440px]">
           <div className="flex flex-col md:flex-row gap-8">
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar
+              username={username}
+              profilePic={profilePic}
+              setUsername={setUsername}
+              setProfilePic={setProfilePic}
+            />
 
             {/* Main Content */}
             <main className="flex-1">

@@ -1,12 +1,14 @@
-import { useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router";
 import Sidebar from "./sidebar";
 import FavouriteArticles from "../shared/favouriteArticle";
 import { BlogContext } from "../../store/blogContext";
 
 const FavBlog = () => {
-  const { favouriteList, isLoggedin, getFavouritelist } =
-    useContext(BlogContext);
+  const { favouriteList, isLoggedin, getFavouritelist } = useContext(BlogContext);
+  // used in sidebar
+  const [profilePic, setProfilePic] = useState(""); 
+  const [username, setUsername] = useState(""); 
 
   useEffect(() => {
     if (isLoggedin) getFavouritelist();
@@ -18,7 +20,12 @@ const FavBlog = () => {
         <div className="container mx-auto px-6 max-w-[1440px]">
           <div className="flex flex-col md:flex-row gap-10">
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar
+              username={username}
+              profilePic={profilePic}
+              setUsername={setUsername}
+              setProfilePic={setProfilePic}
+            />
 
             {/* Main Content */}
             <main className="flex-1 flex items-center justify-center  min-h-[60vh]">

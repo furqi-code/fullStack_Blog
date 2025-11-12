@@ -29,7 +29,7 @@ CREATE TABLE comments(
   user_id INT NOT NULL,
   blog_id INT NOT NULL,
   comment_id INT PRIMARY KEY AUTO_INCREMENT,
-  content TEXT,
+  content TEXT NOT NULL,
   commented_at DATE,
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (blog_id) REFERENCES blogs(blog_id) ON DELETE CASCADE

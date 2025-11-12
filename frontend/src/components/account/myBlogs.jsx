@@ -7,6 +7,9 @@ import axios from "axios";
 const MyBlogs = () => {
   const [myBlogs, setMyBlogs] = useState([]);
   const [showForm, setshowForm] = useState(false);
+  // used in sidebar
+  const [profilePic, setProfilePic] = useState(""); 
+  const [username, setUsername] = useState("");  
 
   useEffect(() => {
     axios({
@@ -30,7 +33,12 @@ const MyBlogs = () => {
         <div className="container mx-auto px-4 max-w-[1440px]">
           <div className="flex flex-col md:flex-row gap-8">
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar
+              username={username}
+              profilePic={profilePic}
+              setUsername={setUsername}
+              setProfilePic={setProfilePic}
+            />
 
             {/* Main Content */}
             <main className="flex-1">

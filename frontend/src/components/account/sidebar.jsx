@@ -4,15 +4,13 @@ import {
   HeartIcon,
   KeyIcon,
 } from "@heroicons/react/24/outline";
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { BlogContext } from "../../store/blogContext";
 import axios from "axios";
 
-const Sidebar = () => {
+const Sidebar = ({username, profilePic, setUsername, setProfilePic}) => {
   const { setIsloggedin, setFavouritelist } = useContext(BlogContext);
-  const [username, setUsername] = useState("");
-  const [profilePic, setProfilePic] = useState("");
   const navigate = useNavigate()
 
   const tabs = [
@@ -57,9 +55,8 @@ const Sidebar = () => {
       })
       .catch((err) => {
         console.log("Couldn't fetch user profile", err);
-        setError("Failed to load profile data.");
       });
-  }, [username, profilePic]);
+  }, []);
 
   return (
     <aside className="md:w-64 flex-shrink-0">

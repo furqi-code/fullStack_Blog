@@ -8,8 +8,9 @@ const Profile = () => {
   const emailRef = useRef(null);
   const bioRef = useRef(null);
   const locationRef = useRef(null);
-  const profile_picRef = useRef(null);  // input field
-  const [profilPic, setProfilePic] = useState("");  // <img>
+  const profile_picRef = useRef(null); // input field
+  const [profilePic, setProfilePic] = useState(""); // <img> & used in sidebar
+  const [username, setUsername] = useState("");   // used in sidebar
   const [date, setDate] = useState(null);
   const [totalPost, setTotalPost] = useState(0);
   const [totalComments, setTotalComments] = useState(0);
@@ -33,6 +34,7 @@ const Profile = () => {
         if (profile_picRef.current) profile_picRef.current.value = profile_pic || "";
         setDate(created_at);
         setProfilePic(profile_pic);
+        setUsername(username);
       })
       .catch((err) => {
         console.log("Couldn't fetch user profile", err);
@@ -40,6 +42,7 @@ const Profile = () => {
       });
   }, [success]);
 
+// Account statistics data fetch
   useEffect(() => {
     axios({
       method: "GET",
@@ -48,13 +51,13 @@ const Profile = () => {
         Authorization: localStorage.getItem("userDetail"),
       },
     })
-    .then((res) => {
-      if (res.data.data.length > 0) setTotalPost(res.data.data.length);
-    })
-    .catch((err) => {
+      .then((res) => {
+        if (res.data.data.length > 0) setTotalPost(res.data.data.length);
+      })
+      .catch((err) => {
         console.log("Couldn't fetch user blogs", err);
       });
-  })
+  });
 
   useEffect(() => {
     axios({
@@ -70,7 +73,7 @@ const Profile = () => {
       .catch((err) => {
         console.log("Error while fetching your personal comments");
       });
-  })
+  });
 
   const handleSaveChanges = (e) => {
     e.preventDefault();
@@ -92,7 +95,7 @@ const Profile = () => {
         username,
         location,
         bio,
-        profile_pic
+        profile_pic,
       },
     })
       .then((res) => {
@@ -114,7 +117,12 @@ const Profile = () => {
         <div className="container mx-auto px-4 max-w-[1440px]">
           <div className="flex flex-col md:flex-row gap-8">
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar
+              username={username}
+              profilePic={profilePic}
+              setUsername={setUsername}
+              setProfilePic={setProfilePic}
+            />
 
             {/* Main Content */}
             <main className="flex-1">
@@ -127,7 +135,7 @@ const Profile = () => {
                     <div className="md:w-1/3">
                       <div className="aspect-square w-full max-w-[200px] mx-auto relative">
                         <img
-                          src={profilPic}
+                          src={profilePic}
                           alt="Profile pic"
                           className="rounded-full w-full h-full object-cover"
                         />
@@ -258,7 +266,9 @@ const Profile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-sm text-gray-500">Total Posts</p>
-                      <p className="text-2xl font-semibold text-gray-900">{totalPost}</p>
+                      <p className="text-2xl font-semibold text-gray-900">
+                        {totalPost}
+                      </p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-sm text-gray-500">Total Comments</p>
