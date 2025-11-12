@@ -118,13 +118,13 @@ const BlogForm = ({ setshowForm }) => {
         <button
           type="button"
           onClick={() => setshowForm(false)}
-          className="inline-flex items-center px-4 py-2 border border-transparent shadow-md text-sm font-semibold rounded-lg bg-gradient-to-r from-primary-color to-secondary-color hover:from-secondary-color hover:to-primary-color transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-primary-color"
+          className="px-5 py-2 bg-gray-300 text-gray-800 rounded-lg border-2 border-gray-300 hover:border-transparent hover:bg-gray-400 transition duration-300 ease-in-out shadow-sm cursor-grab focus:outline-none focus:ring-2 focus:ring-gray-300"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="bg-primary-color hover:bg-secondary-color px-4 py-2 rounded"
+          className="px-5 py-2 bg-blue-400 text-white rounded-lg border-2 border-blue-400 hover:border-transparent hover:bg-green-500 transition duration-300 ease-in-out shadow-sm cursor-grab focus:outline-none"
         >
           Submit
         </button>

@@ -142,12 +142,13 @@ const Detail = () => {
                   <div className="text-sm text-gray-500">
                     <span>{blog.date.split("T")[0]}</span>
                     <span className="mx-2">•</span>
-                    <span>{blog.readTime}</span>
+                    <span>{blog.readTime} min</span>
                   </div>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
                 <button
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors cursor-grab"
                   onClick={async () => {
                     if (!alreadyinList) await addtoFavourite(blogId);
                     else
@@ -155,7 +156,6 @@ const Detail = () => {
                         "this Blog already available in your favoutire list"
                       );
                   }}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
                   {!alreadyinList ? (
                     <HeartIcon className="w-6 h-6 text-gray-600" />
@@ -163,7 +163,7 @@ const Detail = () => {
                     <HeartIconSolid className="w-6 h-6 text-red-500" />
                   )}
                 </button>
-                <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <button className="p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
                   <ShareIcon className="w-6 h-6 text-gray-600" />
                 </button>
               </div>
@@ -201,7 +201,7 @@ const Detail = () => {
               <div className="mt-4 flex justify-end">
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-primary-color rounded-md hover:bg-secondary-color transition-colors"
+                  className="px-5 py-2 bg-blue-400 text-white rounded-lg border-2 border-blue-400 hover:border-transparent hover:bg-green-500 transition duration-300 ease-in-out shadow-sm cursor-grab focus:outline-none"
                 >
                   Post Comment
                 </button>

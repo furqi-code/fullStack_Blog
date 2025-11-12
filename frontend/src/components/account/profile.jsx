@@ -131,7 +131,7 @@ const Profile = () => {
                           alt="Profile pic"
                           className="rounded-full w-full h-full object-cover"
                         />
-                        <button className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50">
+                        <button className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 cursor-pointer">
                           <Cog6ToothIcon className="w-5 h-5 text-gray-600" />
                         </button>
                       </div>
@@ -241,7 +241,7 @@ const Profile = () => {
                         <div className="pt-4">
                           <button
                             type="submit"
-                            className="bg-primary-color px-4 py-2 rounded-md hover:bg-secondary-color focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2"
+                            className="px-5 py-2 bg-blue-400 text-white rounded-lg border-2 border-blue-400 hover:border-transparent hover:bg-green-500 transition duration-300 ease-in-out shadow-sm cursor-grab focus:outline-none"
                           >
                             Save Changes
                           </button>

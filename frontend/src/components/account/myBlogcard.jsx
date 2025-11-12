@@ -90,13 +90,13 @@ const MyblogCard = ({ setMyBlogs, blog }) => {
             />
             <div className="flex space-x-4">
               <button
-                className="text-green-600 hover:text-green-700 font-semibold"
+                className="text-green-600 hover:text-green-700 font-semibold cursor-grab"
                 onClick={saveEdit}
               >
                 Save
               </button>
               <button
-                className="text-gray-600 hover:text-gray-800 font-semibold"
+                className="text-gray-600 hover:text-gray-800 font-semibold cursor-grab"
                 onClick={() => setIsEditing(false)}
               >
                 Cancel
@@ -112,7 +112,7 @@ const MyblogCard = ({ setMyBlogs, blog }) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <button
-                  className="text-blue-600 hover:text-blue-700 text-sm font-medium inline-flex items-center"
+                  className="text-blue-600 hover:text-blue-700 text-sm font-medium inline-flex items-center cursor-grab"
                   onClick={() => setIsEditing(true)}
                 >
                   <svg
@@ -133,7 +133,7 @@ const MyblogCard = ({ setMyBlogs, blog }) => {
                 </button>
 
                 <button
-                  className="text-red-600 hover:text-red-700 text-sm font-medium inline-flex items-center"
+                  className="text-red-600 hover:text-red-700 text-sm font-medium inline-flex items-center cursor-grab"
                   onClick={deleteMyBlog}
                 >
                   <svg

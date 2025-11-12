@@ -58,7 +58,7 @@ const HomeDesign = () => {
                   {mainFeatured.title}
                 </h3>
                 <p className="text-gray-600 mb-4 line-clamp-3">
-                  {mainFeatured.discription}
+                  {mainFeatured.description}
                 </p>
               </article>
             )}

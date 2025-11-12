@@ -28,7 +28,7 @@ const CommentCard = ({ comment, deleteMyComment }) => {
       {isLoggedin && (
         <button
           type="button"
-          className="text-red-500 hover:text-red-700 text-sm font-medium inline-flex items-center"
+          className="text-red-500 hover:text-red-700 text-sm font-medium inline-flex items-center cursor-grab"
           onClick={() => deleteMyComment(comment.comment_id)}
         >
           <svg

@@ -1,12 +1,12 @@
 import { useState, useContext } from "react";
 import { Link, NavLink } from "react-router";
 import { BlogContext } from "../../store/blogContext";
-import { set } from "react-hook-form";
 // import { token } from "./Config";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const {isLoggedin, setIsloggedin, setFavouritelist} = useContext(BlogContext);
+  const { isLoggedin, setIsloggedin, setFavouritelist } =
+    useContext(BlogContext);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -43,46 +43,44 @@ const Header = () => {
               Food
             </NavLink>
           </nav>
-
           <div className="hidden md:flex space-x-4">
             {isLoggedin === false ? (
               <>
                 <Link
                   to="/login"
-                  className="px-4 py-2 border border-primary-color text-primary-color rounded-md hover:bg-primary-color hover:text-white transition"
+                  className="px-5 py-2 border-2 border-blue-300 text-blue-400 rounded-lg hover:bg-blue-400 hover:text-white transition duration-300 ease-in-out focus:outline-none"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 bg-primary-color hover:bg-secondary-color rounded-md transition"
+                  className="px-5 py-2 bg-blue-400 text-white rounded-lg hover:bg-yellow-400 transition duration-300 ease-in-out shadow-sm cursor-pointer focus:outline-none"
                 >
                   Register
-                </Link>{" "}
+                </Link>
               </>
             ) : (
               <>
                 <Link
                   to="/account/profile"
-                  className="px-4 py-2 border border-primary-color text-primary-color rounded-md hover:bg-primary-color hover:text-white transition"
+                  className="px-5 py-2 border-2 border-blue-300 text-blue-400 rounded-lg hover:bg-blue-400 hover:text-white transition duration-300 ease-in-out focus:outline-none"
                 >
                   Account
                 </Link>
                 <Link
-                  to='/'
-                  className="px-4 py-2 bg-primary-color hover:bg-secondary-color rounded-md transition"
+                  to="/"
                   onClick={() => {
-                    localStorage.removeItem('userDetail');
-                    setFavouritelist([]); // empty krde
+                    localStorage.removeItem("userDetail");
+                    setFavouritelist([]);
                     setIsloggedin(false);
                   }}
+                  className="px-5 py-2 bg-blue-400 text-white rounded-lg hover:bg-red-600 transition duration-300 ease-in-out shadow-sm cursor-pointer focus:outline-none"
                 >
                   Logout
                 </Link>
               </>
             )}
           </div>
-
           <button
             onClick={toggleMobileMenu}
             className="md:hidden p-2 text-gray-700 focus:outline-none"

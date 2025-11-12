@@ -44,7 +44,7 @@ const MyBlogs = () => {
                       onClick={() => {
                         setshowForm(true);
                       }}
-                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md bg-primary-color hover:bg-secondary-color focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-color"
+                      className="inline-flex items-center px-5 py-2 border-2 border-blue-400 bg-blue-400 text-white rounded-lg hover:border-transparent hover:bg-yellow-300 transition duration-300 ease-in-out shadow-sm cursor-grab focus:outline-none"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +60,7 @@ const MyBlogs = () => {
                           d="M12 4v16m8-8H4"
                         />
                       </svg>
-                      Add New Blog
+                      Post New Blog
                     </button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
